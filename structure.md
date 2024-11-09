@@ -40,6 +40,10 @@ ai-calendar-api/
 │   └── pagination.py
 ├── tests/
 │   └── __init__.py
+├── versions/
+│   ├── 134300f518ff_cascade_to_models.py
+│   ├── 2217e2855006_all_models.py
+│   └── ce5a865f9e01_base_models.py
 ├── .DS_Store
 ├── .env
 ├── .env.template
@@ -47,6 +51,7 @@ ai-calendar-api/
 ├── Makefile
 ├── README.md
 ├── alembic.ini
+├── app.log
 ├── generate_structure.py
 ├── logging.ini
 ├── poetry.lock
