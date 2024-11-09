@@ -30,11 +30,6 @@ else:
 sync_database_url = settings.DATABASE_URL.replace("+asyncpg", "")
 config.set_main_option("sqlalchemy.url", sync_database_url)
 
-# Import all models
-from src.calendar.models import Calendar  # noqa: F401
-from src.event.models import Event  # noqa: F401
-from src.user.models import User  # noqa: F401
-
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel

@@ -8,6 +8,10 @@ DATABASE_URL = settings.DATABASE_URL
 engine = create_async_engine(DATABASE_URL, echo=True)
 Base = declarative_base()
 
+from .calendar.models import Calendar  # noqa
+from .event.models import Event  # noqa
+from .user.models import User  # noqa
+
 async_session = sessionmaker(
     autocommit=False, autoflush=False, bind=engine, class_=AsyncSession
 )
