@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..database import get_db
@@ -12,6 +12,7 @@ from .repository import (
     update_calendar,
 )
 from .schemas import CalendarCreate, CalendarResponse, CalendarUpdate
+from .services import import_ics
 
 router = APIRouter(prefix="/calendars", tags=["calendars"])
 
@@ -80,4 +81,23 @@ async def delete_existing_calendar(
     except ResourceNotFound:
         raise HTTPException(status_code=404, detail="Calendar not found")
     except DatabaseError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/import", status_code=201)
+async def import_calendar_ics(
+    file: UploadFile = File(...),
+    user_id: int = Form(
+        ...
+    ),  # Se requiere el user_id para asignar el calendario al usuario
+    calendar_id: int = Form(None),  # calendar_id opcional
+    db: AsyncSession = Depends(get_db),
+):
+    """Import a .ics file to a calendar."""
+    try:
+        response = await import_ics(await file.read(), user_id, db, calendar_id)
+        return response
+    except ResourceNotFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
